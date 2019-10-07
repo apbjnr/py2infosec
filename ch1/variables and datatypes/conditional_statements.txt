@@ -1,0 +1,94 @@
+#
+## If Statement
+#
+
+if test_condition1:
+	  do stuff
+	  do stuff
+elif test_condition2:
+	  do stuff
+	  do stuff
+elif test_condition3:
+	  do stuff
+	  do stuff
+else:
+	  do stuff
+
+## see if.py file
+
+#
+## While Loops
+#
+
+while  statement_is_true
+	do stuff
+	 do stuff
+
+- break: get out of innermost loop
+- continue: start the next pass of the innermost loop
+- pass: do nothing, placeholder
+
+## see while.py file
+
+#
+## For loops
+#
+
+for item in object:
+      do stuff
+      do stuff
+
+for item in [1,2,3]
+for item in ['a',2,'3']
+for (x,y) in [("apb",30),("sigh",25)]
+
+>>> names = [ 'apb', 'sigh', 'zsasz', 'segfault']
+>>> 
+>>> 
+>>> names
+['apb', 'sigh', 'zsasz', 'segfault']
+>>> 
+>>> for name in names :
+...     print name
+... 
+apb
+sigh
+zsasz
+segfault
+>>> 
+
+>>> hybridList = [ 1, "apb", 2, "sigh", [1,23,3]]
+>>> 
+>>> hybridList
+[1, 'apb', 2, 'sigh', [1, 23, 3]]
+>>> 
+>>> for item in hybridList :
+...     print item
+... 
+1
+apb
+2
+sigh
+[1, 23, 3]
+
+>>> range(10)
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+>>> 
+>>> 
+>>> range(1,10)
+[1, 2, 3, 4, 5, 6, 7, 8, 9]
+>>> 
+>>> range(1,10,2)
+[1, 3, 5, 7, 9]
+>>> 
+>>> 
+>>> for item in range(1,10,2) :
+...     print item
+... 
+1
+3
+5
+7
+9
+>>> 
+
