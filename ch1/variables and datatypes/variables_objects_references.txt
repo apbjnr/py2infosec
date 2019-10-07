@@ -1,0 +1,271 @@
+#
+## Variables
+#
+
+>>> 
+>>> name = "apb"
+>>> 
+>>> name
+'apb'
+>>> 
+>>> 
+>>> name = blah02
+>>> name
+blah02
+>>> 
+
+#
+## memory location of where object is stored.
+#
+
+>>> name = "apb"
+>>> 
+>>> 
+>>> id(name)
+140055438740216
+>>> 
+>>> hex(id(name))
+'0x7f6132accaf8'
+>>> 
+>>> name.__repr__
+<method-wrapper '__repr__' of str object at 0x7f6132accaf8>
+>>> 
+
+#
+## Strings
+#
+
+>>> name = "apb"
+>>> 
+>>> 
+>>> name = 'apb'
+>>> name
+'apb'
+>>> 
+>>> name = 'apb\njnr'
+>>> 
+>>> name
+'apb\njnr'
+>>> 
+>>> print name
+apb
+jnr
+>>> 
+## print interprets \n as new line
+## use raw string so that \n is not interpreted and displayed as \n and part of string
+>>> name = r'apb\njnr'
+>>> 
+>>> print name
+apb\njnr
+>>> 
+
+## More ways to define strings
+>>> name = """
+... apbjnr blah blah blah.
+... big sigh
+... """
+>>> name
+'\napbjnr blah blah blah.\nbig sigh\n'
+## """ automatically added the new line \n
+>>> print name
+
+apbjnr blah blah blah.
+big sigh
+
+>>> 
+
+#
+## Unicode String
+#
+
+# used for internationalization
+>>> name = u'apb'
+>>> 
+>>> name
+u'apb'
+## the u tells you it is in unicode
+>>> 
+>>> str(name)
+'apb'
+>>> 
+## use str function to convert it into regular string
+## convert regular string into unicode string
+>>> unicode("apb")
+u'apb'
+ 
+#
+## String Operations
+#
+
+>>> name = "apb"
+>>> 
+>>> 
+>>> name [0]
+'a'
+>>> 
+>>> 
+>>> name [0] = a
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'a' is not defined
+>>> 
+
+## cannot change string objects in memory. strings are immutable objects in python
+## to change you need to create a new object
+
+>>> name = "sigh"
+>>> 
+>>> name
+'sigh'
+>>> 
+
+## concacenate strings
+>>> first_name = "apb"
+>>> last_name = "jnr"
+>>> 
+>>> full_name = first_name + last_name
+>>> 
+>>> full_name
+'apbjnr'
+>>> 
+>>> full_name = first_name + ' ' + last_name
+>>> 
+>>> full_name
+'apb jnr'
+>>> 
+
+## repeated strings 
+
+>>> buffer = "A"*50
+>>> buffer
+'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+
+## slicing - breaking up the string
+>>> name = "apb jnr"
+>>> 
+>>> name[2:7]
+'b jnr'
+
+
+## Int to string 
+>>> int("42")
+42
+>>> 
+>>> str(42)
+'42'
+>>> 
+
+#
+## String Methods
+#
+
+## name.find
+>>> name
+'apb jnr'
+>>> name.find('sigh')
+# variable does not contain "sigh" so returns -1
+-1
+>>> 
+
+>>> name.find('jn')
+# the 4 means it starts at position 4 or the 4th character.
+4
+>>> 
+
+## name.split
+>>> name.split()
+['apb', 'jnr']
+>>> 
+
+>>> name.split('n')
+# splits where the n would have been
+['apb j', 'r']
+>>> 
+
+## name.replace
+>>> name.replace('jnr', 'sigh')
+'apb sigh'
+# note that the above does not change the name variable. 
+
+#
+## String formatting
+#
+
+>>> ip = "192.168.1.10"
+>>> 
+>>> line = "Crack this IP: %s" % ip
+>>> 
+>>> line
+'Crack this IP: 192.168.1.10'
+>>>
+>>> line = "Crack this IP: %s and name %s" % (ip, "sigh")
+>>> 
+>>> line
+'Crack this IP: 192.168.1.10 and name sigh'
+>>> 
+
+#
+## Lists
+#
+
+>>> mylist = [1,2,3]
+>>> 
+>>> len(mylist)
+3
+>>> 
+>>> mylist[0]
+1
+>>> 
+>>> mylist[1]
+2
+>>> mylist[2]
+3
+>>> 
+
+>>> len(mylist[1])
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: object of type 'int' has no len()
+>>> 
+>>> len(mylist[2])
+2
+>>> 
+
+## numbers and words
+>>> mylist = [1, "apb", 3, "hello"]
+>>> 
+>>> mylist
+[1, 'apb', 3, 'hello']
+>>> 
+>>> 
+>>> mylist.append(4)
+>>> 
+>>> mylist
+[1, 'apb', 3, 'hello', 4]
+>>> 
+>>> mylist.reverse()
+>>> mylist
+[4, 'hello', 3, 'apb', 1]
+>>> 
+>>> 
+>>> mylist.pop()
+1
+>>> 
+>>> mylist
+[4, 'hello', 3, 'apb']
+>>> 
+
+>>> mylist
+[4, 'hello', 3, 'apb']
+>>> 
+>>> 
+>>> mylist.insert(2, "there")
+>>> 
+>>> mylist
+[4, 'hello', 'there', 3, 'apb']
+>>> del mylist[2]
+>>> 
+>>> mylist
+[4, 'hello', 3, 'apb']
+>>> 
+
