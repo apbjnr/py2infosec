@@ -1,0 +1,33 @@
+#
+## Functions
+#
+
+## functions allow sections of code to be grouped better as per functionality
+## makes code neater to only call a function name multiple times instead of using the code over and over
+## def function(arg1, arg2=default,..):
+- ...
+- ...
+- return value
+
+## see file function.py
+
+root@sigh:~/# ./function.py hello
+hello
+hello
+hello
+hello
+hello
+root@sigh:~/# ./function.py hello there
+hello
+hello
+hello
+hello
+hello
+root@sigh:~/# ./function.py "hello there"
+hello there
+hello there
+hello there
+hello there
+hello there
+root@sigh:~/# 
+
