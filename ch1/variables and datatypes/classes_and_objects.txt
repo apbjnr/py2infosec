@@ -1,0 +1,41 @@
+#
+## Class
+#
+
+## first arugment always to one self.
+def __init__(self,inp1,inp2):
+	self.a = inp1
+	self.b - inp2
+
+def sum(self):
+	return self.a+self.b
+
+def product(self):
+	return self.a*self.b
+
+## see file class.py
+
+
+#
+## Inheritence
+#
+
+
+Class ScientificCalculator (Calculator):
+
+## calculate the power
+	def power(self):
+	     return pow(self.a, self.b)
+
+newPower = Scientific(2,3)
+
+print 'a+b : %d'%newPower.add()
+
+print 'a*b : %d'%newPower.mul()
+
+print 'a pow b: %d' %newPower.power()
+
+
+## see file class.py
+
+
