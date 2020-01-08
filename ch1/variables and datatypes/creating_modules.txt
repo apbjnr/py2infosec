@@ -1,0 +1,14 @@
+#
+## Modules
+#
+
+# Better way of organizing code
+
+# can define classes, functions and variables
+
+# import MODULE_NAME
+
+# from MODULE_NAME import ....
+
+
+## see files modules.py and module-demo.py
