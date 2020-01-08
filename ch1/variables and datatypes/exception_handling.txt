@@ -1,0 +1,61 @@
+#
+## Exceptions
+#
+
+# exceptions are error conditions which disrupt the normal flow of the program
+# python allows for a simple and elegant way to handle exceptions
+
+# how to handle exceptions. 
+
+## try to divide 0 by 0 and see what happens.
+>>> 0/0
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ZeroDivisionError: integer division or modulo by zero
+## exception happened.
+
+## how to handle this in code?
+
+## write a try except block
+>>> try:
+...     a = 0/0
+... except :
+...     print "Exception Happened"
+... 
+Exception Happened
+>>> 
+
+## another way to use the try except block
+>>> try:
+...     a = 10/20
+... except :
+...     print "Exception"
+... else :
+...     print "no exception"
+... finally:
+...     print "Cleanup code"
+... 
+no exception
+Cleanup code
+>>> 
+
+## handle specific task. mention name of exception caused.
+>>> try :
+...     a = 0/0
+... except ZeroDivisionError:
+...     print "Divide by Zero"
+... except :
+...     print "Unknown error"
+... 
+Divide by Zero
+>>> 
+
+## detailed reason for exception
+>>> try :
+...     a = 0/0
+... except Exception as im:
+...     print im
+... 
+integer division or modulo by zero
+>>> 
+
