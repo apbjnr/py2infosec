@@ -1,0 +1,14 @@
+#
+## Packages 
+#
+
+# hierarchical file directory structure to oraginze code
+
+# consists of modules and sub packages
+
+see dir packagedemo and file pack.py
+
+
+the packagedemo dir contains the scientific calculator script (modules.py) and the __init__.py file which imports the functions.
+
+the pack.py script and then import all functions contained in the packagedemo dir.
