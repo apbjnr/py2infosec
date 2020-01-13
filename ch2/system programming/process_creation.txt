@@ -1,0 +1,56 @@
+### Process Creation
+
+## Forking
+
+# cloning of a process
+# forking created an identical process as the parent
+# the threadof execution is duplicated exactly at the point of call to fork()
+ - returns 0 in the child
+ - returns pid of the child in the parent
+# PID is different for parent / child
+
+# see file fork-demo.py
+
+root@kali:~/# python fork-demo.py 
+I am the parent process with PID : 69611
+We are inside the parent process
+ Our child has the PID : 69612
+I am the child process and my PID is : 69612
+The child is exiting
+
+
+## Use of fork()
+
+# dedicate child to a task given by the parent
+# parent and child can communicate if required using IPC
+# parent / child binary remains the same
+
+
+## Spawning new processes
+
+# os.exec* functions
+ - os.execl
+ - os.execle
+ - ...
+
+# overlays parent process with the child
+>>> import os
+>>> 
+>>> os.execvp("ping", ["ping", "127.0.0.1"])
+PING 127.0.0.1 (127.0.0.1) 56(84) bytes of data.
+64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.327 ms
+64 bytes from 127.0.0.1: icmp_seq=2 ttl=64 time=0.045 ms
+64 bytes from 127.0.0.1: icmp_seq=3 ttl=64 time=0.043 ms
+64 bytes from 127.0.0.1: icmp_seq=4 ttl=64 time=0.033 ms
+64 bytes from 127.0.0.1: icmp_seq=5 ttl=64 time=0.030 ms
+64 bytes from 127.0.0.1: icmp_seq=6 ttl=64 time=0.036 ms
+64 bytes from 127.0.0.1: icmp_seq=7 ttl=64 time=0.111 ms
+64 bytes from 127.0.0.1: icmp_seq=8 ttl=64 time=0.028 ms
+64 bytes from 127.0.0.1: icmp_seq=9 ttl=64 time=0.030 ms
+64 bytes from 127.0.0.1: icmp_seq=10 ttl=64 time=0.036 ms
+^C
+--- 127.0.0.1 ping statistics ---
+10 packets transmitted, 10 received, 0% packet loss, time 9197ms
+rtt min/avg/max/mdev = 0.028/0.071/0.327/0.088 ms
+
+
