@@ -1,0 +1,65 @@
+#
+## Directory Details
+#
+
+# methods of traversing directories
+
+# listing files and their information
+
+# creating and deleting directories + files
+
+# test to check if something is a file or directory
+
+## in order to achieve the above, you need to import the 'os' module
+>>> import os
+>>> 
+>>> 
+>>> os.getcwd()
+'/root/tools/python/module2'
+>>> 
+>>> 
+>>> os.mkdir("newdir")
+>>>
+>>> os.rmdir("newdir")
+>>>
+>>> os.listdir(".")
+['file_handing', 'sighs.txt', 'directory_navigation', '.directory_navigation.swp']
+>>> 
+>>> 
+>>> os.listdir("/")
+['etc', 'tmp', 'vmlinuz', 'sys', 'root', 'vmlinuz.old', 'srv', 'initrd.img', 'sbin', 'opt', 'dev', 'home', 'lib', 'var', 'mnt', 'usr', 'boot', 'lib32', 'bin', 'run', '.cache', '0', 'lost+found', 'media', 'lib64', 'libx32', 'proc', 'initrd.img.old']
+>>> 
+>>> for item in os.listdir(".") :
+...     if os.path.isfile(item) :
+...             print item + " is a file"
+...     elif os.path.isdir(item) :
+...             print item + " is a directory"
+...     else :
+...             print "unknown!"
+... 
+newdir is a directory
+file_handing is a file
+sighs.txt is a file
+directory_navigation is a file
+.directory_navigation.swp is a file
+
+>>> 
+>>> import glob
+>>> 
+>>> for item in glob.glob(os.path.join(".", "*")) :
+...     print item
+... 
+./newdir
+./file_handing
+./sighs.txt
+./directory_navigation
+>>> 
+>>> for item in glob.glob(os.path.join(".", "*.txt")) :
+...     print item
+... 
+./sighs.txt
+>>> 
+
+
+
+ 
