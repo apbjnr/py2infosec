@@ -1,0 +1,78 @@
+#
+## subprocess
+#
+
+# subprocess help you invoke other processes and interact with them
+
+# shell = False
+# shell = True is a security risk.
+# setting the shell argument to a true value causes subprocess to spawn an intermediate shell process, and tell it to run the command. in other words, using an intermediate shell means that variables, glob patterns, and other special shell features in the command string are processed before the command is run. 
+
+## subprocess.call(['ps','aux'])
+>>>
+>>> import subprocess
+>>> 
+>>> subprocess.call(['ps','aux'])
+USER        PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root          1  0.0  0.1 166544  7640 ?        Ss   Jan09   0:24 /sbin/init
+root          2  0.0  0.0      0     0 ?        S    Jan09   0:00 [kthreadd]
+root          3  0.0  0.0      0     0 ?        I<   Jan09   0:00 [rcu_gp]
+root          4  0.0  0.0      0     0 ?        I<   Jan09   0:00 [rcu_par_gp]
+root          6  0.0  0.0      0     0 ?        I<   Jan09   0:00 [kworker/0:0H-kblockd]
+root          9  0.0  0.0      0     0 ?        I<   Jan09   0:00 [mm_percpu_wq]
+root         10  0.0  0.0      0     0 ?        S    Jan09   0:18 [ksoftirqd/0]
+....
+
+## subprocess.check_output(['ls','-al'])
+>>>
+>>> import subprocess
+>>> subprocess.call(['ls','-al'])
+total 488
+drwxr-xr-x 31 root root  4096 Jan 14 08:23 .
+drwxr-xr-x 19 root root  4096 Nov 11 19:24 ..
+-rw-------  1 root root 37586 Jan  8 10:31 .bash_history
+-rw-r--r--  1 root root  3391 Oct 16  2018 .bashrc
+drwx------  4 root root  4096 Aug 16 11:09 .BurpSuite
+drwx------ 18 root root  4096 Nov 11 19:42 .cache
+drwxr-xr-x 23 root root  4096 Aug 28 09:51 .config
+drwxr-xr-x  2 root root  4096 Dec 25  2018 Desktop
+drwxr-xr-x  2 root root  4096 Dec 25  2018 Documents
+drwxr-xr-x  2 root root  4096 Nov 11 14:36 Downloads
+....
+
+## to use the output for further processing
+## subprocess.check_output(['ls'])
+
+>>> subprocess.check_output(['ls'])
+'Desktop\nDocuments\nDownloads\nMusic\nPictures\nPublic\nTemplates\ntools\nVideos\n'
+
+>>> lines = subprocess.check_output(['ls'])
+>>> 
+>>> lines[0]
+'a'
+>>> lines[10]
+'x'
+>>> 
+
+>>> line_list = lines.split('\n')
+>>> line_list
+['Desktop', 'Documents', 'Downloads', 'Music', 'Pictures', 'Public', 'Templates', 'tools', 'Videos', '']
+>>> 
+
+#
+## Advanced usage
+#
+
+# stdin
+# stdout
+# stderr
+
+# subprocess.Popen(...)
+
+>>> handle = subprocess.Popen("ls", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
+>>> 
+>>> handle.stdout.read()
+'Desktop\nDocuments\nDownloads\nMusic\nPictures\nPublic\nTemplates\ntools\nVideos\n'
+
+
+
