@@ -1,0 +1,61 @@
+### threading and queues
+
+# create task queues
+# threads receive tasks
+# threads complete taks and inform queue
+# all threads exit once queue is empty
+
+# see file q.py
+
+
+root@kali:~/# python q.py 
+Creating WorkerThread : 0
+In WorkerThread
+ WorkerThread 0 Created!
+Creating WorkerThread : 1
+In WorkerThread
+ WorkerThread 1 Created!
+Creating WorkerThread : 2
+In WorkerThread
+ WorkerThread 2 Created!
+Creating WorkerThread : 3
+In WorkerThread
+ WorkerThread 3 Created!
+Creating WorkerThread : 4
+In WorkerThread
+WorkerThread 4 Created!
+Creating WorkerThread : 5
+WorkerThread 5 Created!
+Creating WorkerThread : 6
+In WorkerThread
+WorkerThread 6 Created!
+Creating WorkerThread : 7
+In WorkerThread
+WorkerThread 7 Created!
+Creating WorkerThread : 8
+In WorkerThread
+WorkerThread 8 Created!
+Creating WorkerThread : 9
+In WorkerThread
+WorkerThread 9 Created!
+Ordered to sleep for 0 seconds!
+Finished sleepinng for 0 seconds
+Ordered to sleep for 1 seconds!
+Ordered to sleep for 2 seconds!
+Ordered to sleep for 3 seconds!
+Ordered to sleep for 4 seconds!
+Ordered to sleep for 5 seconds!
+Ordered to sleep for 6 seconds!
+Ordered to sleep for 7 seconds!
+Ordered to sleep for 8 seconds!
+Ordered to sleep for 9 seconds!
+In WorkerThread
+Finished sleepinng for 1 seconds
+Finished sleepinng for 2 seconds
+Finished sleepinng for 3 seconds
+Finished sleepinng for 4 seconds
+Finished sleepinng for 5 seconds
+Finished sleepinng for 6 seconds
+Finished sleepinng for 7 seconds
+Finished sleepinng for 8 seconds
+
