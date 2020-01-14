@@ -1,0 +1,39 @@
+### Python Threading
+
+* side note - rather use multiprocessing
+
+
+## Threads in python
+
+# simple threads using thread module
+# more complicated ones using the threading module
+
+# see file threads.py
+
+root@kali:~/ python threads.py 
+Thread ID 0 now alive!
+ Thread ID 2 now alive!Thread with ID 0 has counter value 1
+
+Thread with ID 2 has counter value 1
+Main thread going for a infinite wait loop
+ Thread ID 4 now alive!
+Thread with ID 4 has counter value 1
+Thread ID 3 now alive!Thread ID 1 now alive!
+
+Thread with ID 3 has counter value 1
+Thread with ID 1 has counter value 1
+Thread with ID 1 has counter value 2Thread with ID 4 has counter value 2
+
+Thread with ID 0 has counter value 2
+ Thread with ID 2 has counter value 2
+Thread with ID 3 has counter value 2
+Thread with ID 2 has counter value 3
+Thread with ID 4 has counter value 3
+Thread with ID 3 has counter value 3
+Thread with ID 0 has counter value 3
+Thread with ID 1 has counter value 3
+Thread with ID 2 has counter value 4
+Thread with ID 4 has counter value 4
+Thread with ID 3 has counter value 4
+Thread with ID 0 has counter value 4Thread with ID 1 has counter value 4
+
