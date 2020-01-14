@@ -1,0 +1,20 @@
+#
+## Signals
+#
+
+# allows handling of asynchronous events
+# SIGKILL is what gets sent when you use "kill -9"
+
+# list of signals - man 7 signal
+
+# see file signal.py
+
+root@kali:~/# python signal.py 
+installing signal handler ....
+done!
+^Chaha! you cannot kill me!
+^Chaha! you cannot kill me!
+^Chaha! you cannot kill me!
+^Z
+[2]+  Stopped                 python signal.py
+
