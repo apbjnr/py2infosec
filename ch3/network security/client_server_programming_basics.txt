@@ -1,0 +1,109 @@
+#
+## network programming
+#
+
+## socket programming
+
+* tcp and udp sockets 
+ - regular servers and clients
+
+* raw sockets 
+ - sniffing and injection
+
+
+#
+## server and client programming
+#
+
+* server
+ - offer a service
+
+* client
+ - use / consume the service
+
+* using the sockets module
+ -  what is a socket? - a socket is a network endpoint for communication between two or more entities.
+
+>>> import socket
+>>> 
+## create tcp socket which will be listening on a specific port
+>>> tcpSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+## two arguments, af_inet is the internet address family for the internet, sock_stream used for tcp.
+>>> 
+## bind ip address and port
+>>> tcpSocket.bind(("0.0.0.0",8000)) 
+>>>
+## start listening on the specified ip and port
+>>> tcpSocket.listen(2)
+## listen specifies the amount of concurrent clients the socket can handle. 
+>>>
+## accepting clients
+>>> (client, ( ip, port)) = tcpSocket.accept()
+
+
+## waiting to accept client. use nc from another terminal to try and connect
+root@kali:~# nc 192.168.163.147 8000
+
+## back to python console
+>>> (client, ( ip, port)) = tcpSocket.accept()
+>>> client
+<socket._socketobject object at 0x7fac80c50830>
+## socket client connect
+>>> 
+>>> 
+>>> ip
+'192.168.163.147'
+## ip of remote host
+>>> 
+>>> port
+53034
+## remote port of client
+>>> 
+## at this point the client is waiting to either send data or receive data. 
+## sending data
+>>> client.send("welcome")
+7
+## the 7 is the size of the data sent
+>>> 
+root@kali:~# nc 192.168.163.147 8000
+welcome
+## back to the nc terminal shows data received
+## to receive data back from the client
+>>> data = client.recv(2048)
+## the 2048 is the size of the buffer
+root@kali:~# nc 192.168.163.147 8000
+welcome
+thanks
+## sent back thanks from nc
+>>> data = client.recv(2048)
+>>> data
+'thanks\n'
+>>> 
+## data retured. 
+
+#
+## echo server
+#
+
+# accept string from the client and sent it back to the client
+
+# see file server.py
+
+#
+## process client options
+#
+
+* process clients sequentially and one at a time
+
+* multi-threaded server
+
+* multi-process server
+
+* non-blocking sockets with select (multiplexing)
+
+
+
+
+
+
+ 
