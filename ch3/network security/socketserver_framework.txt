@@ -1,0 +1,72 @@
+#
+## socketserver
+#
+
+* socketserver is a module in python
+* framework in python to create tcp and udp servers
+* does al the basic steps for you in the background
+* comes in handy if you want to create a server to lure a client and analyze its behaviour.
+
+## see files server.py and client.py
+
+## start server.py and see if client.py connects. Then try to send a string from the client to the server which should then echo back that string.
+
+# starting server...
+root@kali:~/# python server.py
+waiting for a client ...
+
+# starting client
+root@kali:~/# python client.py 127.0.0.1
+please enter a string:
+
+# confirmed client connected to server
+root@kali:~/# python server.py
+waiting for a client ...
+received connection from :  127.0.0.1
+
+# send string from client, and receive echo from server
+root@kali:~/# python client.py 127.0.0.1
+please enter a string: sigh  ## string sent
+sigh ## echo received
+please enter a string:
+
+root@kali:~/# python server.py
+waiting for a client ...
+received connection from :  127.0.0.1 ## client connected
+starting echo output ....
+client sent:   sigh ## string received from client
+
+## the above is not very practical, hence the framework which can do the above for you in the background using a couple of lines of code. 
+
+
+#
+## module usage
+# 
+
+* has to be subclass of BaseRequestHandler
+* override handle() to process request
+* call handle_request to serve_forever to process clients
+* for tcp servers
+  - self.request is the client socket
+  - self.client_address is the client details
+
+## see file demo.py
+
+# run server and see connection from client
+root@kali:~/# python demo.py
+got connection from :  ('127.0.0.1', 49220)
+client sent: sigh ## data received from client
+
+# run client
+root@kali:~/# nc 0.0.0.0 9000
+sigh ## sent data to server
+sigh ## data echo'ed back to client from server
+
+
+
+
+
+
+
+
+
