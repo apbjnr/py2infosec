@@ -1,0 +1,74 @@
+#
+## how does a web application server work
+#
+
+* listen on port 80 / 443
+* wait for client requests (GET,POST,HEAD ...)
+* process request
+  - serve files
+  - execute cgi scripts
+
+# see file webserver.py
+
+#
+## simple web application server
+#
+
+* SimpleHTTPServer class
+* implement do_GET()
+
+* can be used to serve exploit code to a client
+* can be used to penetration test cliend side code
+
+
+## start web server via python console
+>>> import SocketServer
+>>> import SimpleHTTPServer
+>>> httpServer = SocketServer.TCPServer(('', 10001), SimpleHTTPServer.SimpleHTTPRequestHandler)
+>>>
+>>> httpServer.serve_forever()
+
+## connect to web server using browser or curl and you get back a directory / file listing. default behaviour.
+root@kali:~# curl 0.0.0.0:10001
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN"><html>
+<title>Directory listing for /</title>
+<body>
+<h2>Directory listing for /</h2>
+<hr>
+<ul>
+<li><a href=".creating_web_server.txt.swp">.creating_web_server.txt.swp</a>
+<li><a href=".webserver.py.swp">.webserver.py.swp</a>
+<li><a href="client.py">client.py</a>
+<li><a href="client_server_programming_basics.txt">client_server_programming_basics.txt</a>
+<li><a href="creating_web_server.txt">creating_web_server.txt</a>
+<li><a href="demo.py">demo.py</a>
+<li><a href="server.py">server.py</a>
+<li><a href="sigh">sigh</a>
+<li><a href="socketserver_framework.txt">socketserver_framework.txt</a>
+<li><a href="tcpserver.py">tcpserver.py</a>
+<li><a href="webserver.py">webserver.py</a>
+</ul>
+<hr>
+</body>
+</html>
+root@kali:~#
+
+## see GET request on the server from the client
+>>> import SocketServer
+>>> import SimpleHTTPServer
+>>> httpServer = SocketServer.TCPServer(('', 10001), SimpleHTTPServer.SimpleHTTPRequestHandler)
+>>>
+>>> httpServer.serve_forever()
+127.0.0.1 - - [16/Jan/2020 09:05:26] "GET / HTTP/1.1" 200 -
+
+
+## run webserver.py
+root@kali:~/# python webserver.py
+
+## connect with browser / curl
+root:kali:~/# lynx 0.0.0.0:10000 # only returns a listing again
+
+## connect to the admin page
+root@kali:~/# lynx 0.0.0.0:10000/admin
+admin only Host: 0.0.0.0:10000 Accept: text/html, text/plain, text/sgml, text/css, */*;q=0.01 Accept-Encoding: gzip, compress, bzip2 Accept-Language: en User-Agent: Lynx/2.9.0dev.4
+   libwww-FM/2.14 SSL-MM/1.4.1 GNUTLS/3.6.9
