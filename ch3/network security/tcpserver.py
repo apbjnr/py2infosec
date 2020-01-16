@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/local/python
 
 import SocketServer
 import socket
