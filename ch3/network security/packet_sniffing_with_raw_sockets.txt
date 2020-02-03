@@ -1,0 +1,229 @@
+#
+## raw socket basics
+#
+
+* raw sockets provide a way to bypass the whole network stack traversal of a packet and deliver it directly to an application
+
+* multiple ways to create raw sockets. concentrate on the PF_PACKET interface
+
+user land application
+	^
+	|			Application
+socker interface		raw socket
+	^			   ^
+	|			   |
+tcp/udp processing		   |
+	^			   |
+	|			   |
+ip processing			   |
+	^			   |
+	|			   |
+protocol family handling routines --
+	^
+	|
+network card driver
+
+
+#
+## PF_PACKET
+#
+
+* it is a software interface to send / receive packets at layer 2 of the OSI. i.e device driver
+
+* all packets received will be complete with all header data
+
+* all packets sent will be transmitted without modification by the kernel to the medium
+
+* supports filtering using berkley packet filter
+
+
+#
+## creating raw sockets
+#
+
+* use the socket module
+
+* read packets
+
+* interpret and analyze them
+
+* can send out responses as well
+
+
+
+#
+## understanding packet headers
+#
+
+ -----------------------------------
+| ethernet | ip | tcp | application |
+ -----------------------------------
+
+0           5 6         11 12        14
+ -------------------------------------
+|  EthDHost  |  EthSHost  |  EthType  |
+ --------------------------------------		Ethernet Header (14 bytes)
+|	Ethernet Packet Data	      |	
+ -------------------------------------
+
+0	 3 4   7 8              15 16                      31
+ -----------------------------------------------------------
+| Version | IHL | Type of Service |      Total Lenght 	    |
+|-----------------------------------------------------------|
+|      Identification             | Flags | Fragment Offset |
+|-----------------------------------------------------------|
+| Time to Live | Protocal         |     Header Checksu      |
+|-----------------------------------------------------------|
+| 			Source Address 			    |
+|-----------------------------------------------------------|
+|			Destination Address 		    |
+|-----------------------------------------------------------| 
+| 		Options                   | Padding         |
+|-----------------------------------------------------------
+
+
+#
+## extracting binary data into variables
+#
+
+* struct.unpack()
+
+* returns tuple format
+
+* first character indicates byte ordering
+  - network byte order is big-endian
+
+ -----------------------------------------------------------------------
+| format | C type 		| python type	 	| standard size |
+ -----------------------------------------------------------------------
+| x	 | pad byte		| no value      	| 1		|
+| c 	 | char			| string of lenght 1	| 1		|
+| b 	 | signed char		| integer		| 1		|
+| B 	 | unsigned char	| integer		| 1		|
+| ? 	 | _Bool		| bool			| 1		|
+| h 	 | short		| integer		| 2		|
+| H 	 | unsigned short	| integer		| 2		|
+| i 	 | int			| integer		| 4		|
+| I 	 | unsigned int		| integer		| 4		|
+| l 	 | long			| integer		| 4		|
+| L 	 | unsigned long	| integer		| 4		|
+| q 	 | long long		| integer		| 8		|
+| Q 	 | unsigned long long	| integer		| 8		|
+| f 	 | float		| float			| 4		|
+| d 	 | double		| float			| 8		|
+| a 	 | char[]		| string		|		|
+| P 	 | chat[]		| string		|		|
+| p 	 | void *		| integer		|		|
+ -----------------------------------------------------------------------
+
+
+>>> import struct
+>>>
+>>> struct.pack("B", 1)
+'\x01'
+>>>
+>>>
+>>> struct.pack("H", 1)
+'\x01\x00' ## little endian
+>>>
+>>> struct.pack(">H", 1)
+'\x00\x01' ## big endian
+>>>
+>>> struct.pack("!H", 1)
+'\x00\x01'
+>>>
+>>> struct.pack("!L", 1)
+'\x00\x00\x00\x01'
+>>>
+>>> struct.unpack("!L", "\x00\x00\x00\x01")
+(1,)
+>>>
+
+#
+## simple sniffer
+#
+
+# print out:
+
+* ethernet addresses
+* ether type
+* ip addresses of the two machines that are trying to communicate
+* source / destination ports
+
+# see file raw_socket_sniffer.py
+
+>>> import socket
+>>> import struct
+>>> import binascii
+>>>
+>>> rawSocket = socket.socket(socket.PF_PACKET, socket.SOCK_RAW, socket.htons(0x0800))
+>>>
+>>> pkt = rawSocket.recvfrom(2048)
+>>>
+>>> pkt
+('\x00\x0c)\xc7Y0\x00PV\xc0\x00\x08\x08\x00E\x00\x00(\x01\xce@\x00\x80\x061\x1c\xc0\xa8\xa3\x01\xc0\xa8\xa3\x93\xc0\xd2\x00\x16\x11hv\xbb\xb5\xf9\x17.P\x10\x10\x04\xc1\xb6\x00\x00\x00\x00\x00\x00\x00\x00', ('eth0', 2048, 0, 1, '\x00PV\xc0\x00\x08'))
+>>>
+>>> ethernetHeader = pkt[0][0:14]
+>>>
+>>> ethernetHeader
+'\x00\x0c)\xc7Y0\x00PV\xc0\x00\x08\x08\x00'
+>>>
+>>> eth_hdr = struct.unpack("!6s6s2s", ethernetHeader)
+>>>
+>>> eth_hdr
+('\x00\x0c)\xc7Y0', '\x00PV\xc0\x00\x08', '\x08\x00')
+>>>
+>>> binascii.hexlify(eth_hdr[0])
+'000c29c75930' ## eth0 mac address  ether 00:0c:29:c7:59:30
+>>>
+>>> binascii.hexlify(eth_hdr[1])
+'005056c00008' ## 
+>>>
+>>> binascii.hexlify(eth_hdr[2])
+'0800'
+>>>
+>>> ipHeader = pkt[0][14:34]
+>>>
+>>> ipHeader
+'E\x00\x00(\x01\xce@\x00\x80\x061\x1c\xc0\xa8\xa3\x01\xc0\xa8\xa3\x93'
+>>>
+>>> ip_hdr = struct.unpack("!12s4s4s", ipHeader)
+>>>
+>>> ip_hdr
+('E\x00\x00(\x01\xce@\x00\x80\x061\x1c', '\xc0\xa8\xa3\x01', '\xc0\xa8\xa3\x93')
+>>>
+>>> print "source IP address: " + socket.inet_ntoa(ip_hdr[1])
+source IP address: 192.168.163.1
+>>>
+>>> print "destination IP address: " + socket.inet_ntoa(ip_hdr[2])
+destination IP address: 192.168.163.147
+>>>
+>>> tcpHeader = pkt[0][34:54]
+>>>
+>>> tcpHeader
+'\xc0\xd2\x00\x16\x11hv\xbb\xb5\xf9\x17.P\x10\x10\x04\xc1\xb6\x00\x00'
+>>>
+>>> tcp_hdr = struct.unpack("!HH16s", tcpHeader)
+>>>
+>>> tcp_hdr
+(49362, 22, '\x11hv\xbb\xb5\xf9\x17.P\x10\x10\x04\xc1\xb6\x00\x00')
+>>>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
