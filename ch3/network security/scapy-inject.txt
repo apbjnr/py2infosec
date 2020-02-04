@@ -1,0 +1,14 @@
+# scapy injection and forging
+
+sendp(Ether()/IP(dst="google.com")/ICMP()/"XXX", iface="eth0", loop=1, inter=1)
+
+# send and receive
+
+srp1(Ether()/IP(dst="google.com", ttl=22)/ICMP()/"XXX")
+
+r1(IP(dst="google.com"), timeout=3)
+
+# routing
+
+conf.route.add(host="192.168.1.10", gw="192.168.1.22")
+conf.route.resync()

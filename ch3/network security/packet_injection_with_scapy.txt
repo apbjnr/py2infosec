@@ -1,0 +1,141 @@
+#
+## packet forging with scapy
+#
+
+ethernet |  ip  |  tcp  | application
+
+Ether()  | IP() | TCP() | Data
+
+## create a packet
+>>> pkt = IP(dst="google.com")
+>>>
+>>> pkt
+<IP  dst=Net('google.com') |>
+>>>
+>>> pkt.show()
+###[ IP ]###
+  version= 4
+  ihl= None
+  tos= 0x0
+  len= None
+  id= 1
+  flags=
+  frag= 0
+  ttl= 64
+  proto= hopopt
+  chksum= None
+  src= 192.168.163.147
+  dst= Net('google.com')
+  \options\
+
+>>>
+>>> pkt = IP(dst="google.com")/ICMP()/"sigh...."
+>>>
+>>> pkt.show()
+###[ IP ]###
+  version= 4
+  ihl= None
+  tos= 0x0
+  len= None
+  id= 1
+  flags=
+  frag= 0
+  ttl= 64
+  proto= icmp
+  chksum= None
+  src= 192.168.163.147
+  dst= Net('google.com')
+  \options\
+###[ ICMP ]###
+     type= echo-request
+     code= 0
+     chksum= None
+     id= 0x0
+     seq= 0x0
+###[ Raw ]###
+        load= 'sigh....'
+
+
+#
+## send packets
+#
+
+* sendp - send packets at layer 2. need to give right interface etc.
+
+* send - send packets at layer 3. routing decided based on local table.
+  - loop on the same packet
+  - inter : time inteval in seconds
+
+>>> pkt
+<IP  frag=0 proto=icmp dst=Net('google.com') |<ICMP  |<Raw  load='sigh....' |>>>
+>>> send(pkt)
+.
+Sent 1 packets.
+>>>
+
+
+# layer 2 send
+
+>>> sendp(Ether()/IP(dst="google.com")/ICMP()/"XXX", iface="eth0")
+.
+Sent 1 packets.
+
+
+#
+## send and receive at layer 2 and 3
+#
+
+* layer 3
+  - sr()
+     * returns answers and unanswered packets
+  - sr1()
+     * returns only answer or sent packet
+
+>>> sr(IP(dst="google.com")/ICMP()/"XXX")
+Begin emission:
+....................Finished sending 1 packets.
+......*
+Received 27 packets, got 1 answers, remaining 0 packets
+(<Results: TCP:0 UDP:0 ICMP:1 Other:0>,
+ <Unanswered: TCP:0 UDP:0 ICMP:0 Other:0>)
+
+>>> response, no_response = _
+>>>
+>>> response
+<Results: TCP:0 UDP:0 ICMP:1 Other:0>
+>>>
+>>> no_response
+<Unanswered: TCP:0 UDP:0 ICMP:0 Other:0>
+>>>
+>>> response[0]
+(<IP  frag=0 proto=icmp dst=172.217.170.46 |<ICMP  |<Raw  load='XXX' |>>>,
+ <IP  version=4 ihl=5 tos=0x0 len=31 id=13053 flags= frag=0 ttl=128 proto=icmp chksum=0x4c9d src=172.217.170.46 dst=192.168.163.147 |<ICMP  type=echo-reply code=0 chksum=0x4fa7 id=0x0 seq=0x0 |<Raw  load='XXX' |<Padding  load='\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00' |>>>>)
+>>>
+
+
+
+* layer 2
+  - srp()
+  - srp1()
+ 
+
+#
+## injected packet routing
+#
+
+* uses local routes by default
+
+* can be overridden by scapy
+
+* modified routes can be flushed
+
+* does not affect system routes
+
+
+>>> conf.route
+Network        Netmask        Gateway        Iface  Output IP        Metric
+0.0.0.0        0.0.0.0        192.168.163.2  eth0   192.168.163.147  0
+127.0.0.0      255.0.0.0      0.0.0.0        lo     127.0.0.1        1
+192.168.163.0  255.255.255.0  0.0.0.0        eth0   192.168.163.147  0
+
+
