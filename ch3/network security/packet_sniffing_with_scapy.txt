@@ -1,0 +1,205 @@
+#
+## 3rd party libraries
+#
+
+* raw sockets are painful to use and not too portable across os'
+
+* use of 3rd party libs:
+  - pylibpcap
+  - pycapy
+  - pypcap
+  - Impacket
+  - Scapy
+
+* use scapy because it is the most powerful and flexible among all other options
+
+
+#
+## scapy
+#
+
+* interactive mode or use as library
+
+* can be used for packet sniffing and forging
+
+* plenty of protocols already implemented
+
+* allows to build "reactive" tools
+
+
+root@kali:~/# scapy
+>>>
+>>> ls()
+H         : AH
+AKMSuite   : AKM suite
+ARP        : ARP
+ASN1P_INTEGER : None
+ASN1P_OID  : None
+ASN1P_PRIVSEQ : None
+ASN1_Packet : None
+ATT_Error_Response : Error Response
+ATT_Exchange_MTU_Request : Exchange MTU Request
+ATT_Exchange_MTU_Response : Exchange MTU Response
+ATT_Execute_Write_Request : Execute Write Request
+ATT_Execute_Write_Response : Execute Write Response
+....
+
+>>> conf
+ASN1_default_codec = <ASN1Codec BER[1]>
+AS_resolver = <scapy.as_resolvers.AS_resolver_multi object at 0x7f128b35cd90>
+BTsocket   = <BluetoothRFCommSocket: read/write packets on a connected L2CAP...
+L2listen   = <L2ListenSocket: read packets at layer 2 using Linux PF_PACKET ...
+L2socket   = <L2Socket: read/write packets at layer 2 using Linux PF_PACKET ...
+L3socket   = <L3PacketSocket: read/write packets at layer 3 using Linux PF_P...
+L3socket6  = functools.partial(<L3PacketSocket: read/write packets at layer ...
+USBsocket  = None
+auto_crop_tables = True
+....
+
+
+#
+## protocol layers available
+#
+
+* ls()
+
+* ls(IP)
+
+* IP().show()
+
+* lsc()
+
+* conf
+
+
+#
+## scapy basic cheatsheet
+#
+
+## finding protocols and details
+
+ls()
+ls(IP)
+
+IP().show()
+
+## sniffing packets
+
+pkts = sniff(iface="eth0", count=3)
+
+>>> pkts = sniff(iface="eth0", count=3)
+>>> pkts
+<Sniffed: TCP:3 UDP:0 ICMP:0 Other:0>
+>>>
+
+# reading the packets
+
+>>> pkts[0]
+<Ether  dst=00:50:56:f3:9b:5b src=00:0c:29:bb:09:07 type=IPv4 |<IP  version=4 ihl=5 tos=0x0 len=253 id=43830 flags=DF frag=0 ttl=64 proto=tcp chksum=0xab12 src=192.168.163.128 dst=196.38.187.98 |<TCP  sport=58122 dport=https seq=2933206480 ack=1361384374 dataofs=5 reserved=0 flags=PA window=65535 chksum=0x94b8 urgptr=0 |<Raw  load='\x17\x03\x03\x00\xd0{\xb9\x05\xd9\x16\xb3\x12\rv\xe2\xf7\xa3\xae\xf3\xa2\xe2a\x92\x7f \x8e\x83\x8eUf\x99\x11\xedv\xf1ol\xf8\xc1pjQ\xd1K\xce:\x18\xf5\xffpBG\x1d\xd2\xe4s\x8f\xc1!jb\xf1\x85@\xf6\x11\x97\xac\x0fl\xd9\xadPp\x18\xe8\xf7\x96G\xa1%\xcf\xe3\xaf\x02\xc2\x93\xee\x020\xc0?o7\xfd\xe4\xd3iF\xb1l\x06\x02$\x97\xe9\xc3$$hO%\x02\x84\xfd\x04O\xe5m\xd33\xb3\xde .\xe4\x03\x9e\x10L\x83\xa5\x04\xd8\xb9/5C\xdd\xbf\xe5"b\x7f\x02\xb9G\xb9\x17[r\x90\x04fi)\xef\xc3\xad\xe7\xf1l\xde{\xff\xf5\xb7;\x1d\x93\xc5\x87!\xcf\x9f\x15\x97\xed\x85\xb5S\x89J\xeb\x18\xa1\x13\x9aR\x1d%\x07\xbe!zO\x13\x99\xe4\x92\xb7\xd1c\xd6\xbex\xb0\xa1eT\x18\xcd\xac' |>>>>
+>>>
+>>> pkts[1]
+<Ether  dst=00:0c:29:bb:09:07 src=00:50:56:f3:9b:5b type=IPv4 |<IP  version=4 ihl=5 tos=0x0 len=40 id=991 flags= frag=0 ttl=128 proto=tcp chksum=0x533f src=196.38.187.98 dst=192.168.163.128 |<TCP  sport=https dport=58122 seq=1361384374 ack=2933206693 dataofs=5 reserved=0 flags=A window=64240 chksum=0xaa15 urgptr=0 |<Padding  load='\x00\x00\x00\x00\x00\x00' |>>>>
+>>>
+>>> pkts[2]
+<Ether  dst=00:0c:29:bb:09:07 src=00:50:56:f3:9b:5b type=IPv4 |<IP  version=4 ihl=5 tos=0x0 len=157 id=992 flags= frag=0 ttl=128 proto=tcp chksum=0x52c9 src=196.38.187.98 dst=192.168.163.128 |<TCP  sport=https dport=58122 seq=1361384374 ack=2933206693 dataofs=5 reserved=0 flags=PA window=64240 chksum=0x237e urgptr=0 |<Raw  load='\x17\x03\x03\x00p\x0e\x00\x00\x00\x00\x15\xe4\x00\x07.0\x82\x07*0\x82\xe5\xba__\xe2%\xa7j\xc0/Pa\xe1\xfc\x94k\xfeR\xc1\x9e\xbdG\x9b\x037\xd7\xc1lGL\xb3pJ\xac\x91\xfa%\xdf~\xe4P\x9co\x8f4\xb0\xa2\xe3\x89\xa8\xd1\xcf\xea\x92m\x8d\xdaS\xbb\x89\xcd\x86P\x94\xe9\x03\xd4\n\xd0\x89X\xd2BqP\x9a\x19\xdb\xe1\xa9\xc4\x13\xe4\x0fi@\x01\x1faD\xc8\x947\x0f\xea\x84' |>>>>
+
+# better display format of information
+
+>>> pkts[0].show
+<bound method Packet.show of <Ether  dst=00:50:56:f3:9b:5b src=00:0c:29:bb:09:07 type=IPv4 |<IP  version=4 ihl=5 tos=0x0 len=253 id=43830 flags=DF frag=0 ttl=64 proto=tcp chksum=0xab12 src=192.168.163.128 dst=196.38.187.98 |<TCP  sport=58122 dport=https seq=2933206480 ack=1361384374 dataofs=5 reserved=0 flags=PA window=65535 chksum=0x94b8 urgptr=0 |<Raw  load='\x17\x03\x03\x00\xd0{\xb9\x05\xd9\x16\xb3\x12\rv\xe2\xf7\xa3\xae\xf3\xa2\xe2a\x92\x7f \x8e\x83\x8eUf\x99\x11\xedv\xf1ol\xf8\xc1pjQ\xd1K\xce:\x18\xf5\xffpBG\x1d\xd2\xe4s\x8f\xc1!jb\xf1\x85@\xf6\x11\x97\xac\x0fl\xd9\xadPp\x18\xe8\xf7\x96G\xa1%\xcf\xe3\xaf\x02\xc2\x93\xee\x020\xc0?o7\xfd\xe4\xd3iF\xb1l\x06\x02$\x97\xe9\xc3$$hO%\x02\x84\xfd\x04O\xe5m\xd33\xb3\xde .\xe4\x03\x9e\x10L\x83\xa5\x04\xd8\xb9/5C\xdd\xbf\xe5"b\x7f\x02\xb9G\xb9\x17[r\x90\x04fi)\xef\xc3\xad\xe7\xf1l\xde{\xff\xf5\xb7;\x1d\x93\xc5\x87!\xcf\x9f\x15\x97\xed\x85\xb5S\x89J\xeb\x18\xa1\x13\x9aR\x1d%\x07\xbe!zO\x13\x99\xe4\x92\xb7\xd1c\xd6\xbex\xb0\xa1eT\x18\xcd\xac' |>>>>>
+>>> pkts[0].show()
+###[ Ethernet ]###
+  dst= 00:50:56:f3:9b:5b
+  src= 00:0c:29:bb:09:07
+  type= IPv4
+###[ IP ]###
+     version= 4
+     ihl= 5
+     tos= 0x0
+     len= 253
+     id= 43830
+     flags= DF
+     frag= 0
+     ttl= 64
+     proto= tcp
+     chksum= 0xab12
+     src= 192.168.163.128
+     dst= 196.38.187.98
+     \options\
+###[ TCP ]###
+        sport= 58122
+        dport= https
+        seq= 2933206480
+        ack= 1361384374
+        dataofs= 5
+        reserved= 0
+        flags= PA
+        window= 65535
+        chksum= 0x94b8
+        urgptr= 0
+        options= []
+###[ Raw ]###
+           load= '\x17\x03\x03\x00\xd0{\xb9\x05\xd9\x16\xb3\x12\rv\xe2\xf7\xa3\xae\xf3\xa2\xe2a\x92\x7f \x8e\x83\x8eUf\x99\x11\xedv\xf1ol\xf8\xc1pjQ\xd1K\xce:\x18\xf5\xffpBG\x1d\xd2\xe4s\x8f\xc1!jb\xf1\x85@\xf6\x11\x97\xac\x0fl\xd9\xadPp\x18\xe8\xf7\x96G\xa1%\xcf\xe3\xaf\x02\xc2\x93\xee\x020\xc0?o7\xfd\xe4\xd3iF\xb1l\x06\x02$\x97\xe9\xc3$$hO%\x02\x84\xfd\x04O\xe5m\xd33\xb3\xde .\xe4\x03\x9e\x10L\x83\xa5\x04\xd8\xb9/5C\xdd\xbf\xe5"b\x7f\x02\xb9G\xb9\x17[r\x90\x04fi)\xef\xc3\xad\xe7\xf1l\xde{\xff\xf5\xb7;\x1d\x93\xc5\x87!\xcf\x9f\x15\x97\xed\x85\xb5S\x89J\xeb\x18\xa1\x13\x9aR\x1d%\x07\xbe!zO\x13\x99\xe4\x92\xb7\xd1c\xd6\xbex\xb0\xa1eT\x18\xcd\xac'
+>>>
+
+# hexdump()
+>>> hexdump(pkts[1])
+0000  00 0C 29 BB 09 07 00 50 56 F3 9B 5B 08 00 45 00  ..)....PV..[..E.
+0010  00 28 03 DF 00 00 80 06 53 3F C4 26 BB 62 C0 A8  .(......S?.&.b..
+0020  A3 80 01 BB E3 0A 51 25 13 B6 AE D5 2E A5 50 10  ......Q%......P.
+0030  FA F0 AA 15 00 00 00 00 00 00 00 00              ............
+>>>
+
+## simulating sniffing with a offline pcap capture
+
+pkts = sniff(offline="offline.pcap")
+
+## adding filters
+
+pkts = sniff(iface="eth0", filter="arp", count=3)
+
+>>> pkts = sniff(iface="eth0", filter="icmp",  count=3)
+>>>
+>>> pkts
+<Sniffed: TCP:0 UDP:0 ICMP:3 Other:0>
+>>>
+>>> pkts[0]
+<Ether  dst=00:50:56:f3:9b:5b src=00:0c:29:c7:59:30 type=IPv4 |<IP  version=4 ihl=5 tos=0x0 len=84 id=19875 flags=DF frag=0 ttl=64 proto=icmp chksum=0x78ba src=192.168.163.147 dst=8.8.8.8 |<ICMP  type=echo-request code=0 chksum=0x9e66 id=0x887 seq=0x1 |<Raw  load='\xed+9^\x00\x00\x00\x00a\xb4\n\x00\x00\x00\x00\x00\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f !"#$%&\'()*+,-./01234567' |>>>>
+>>> pkts[1]
+<Ether  dst=00:0c:29:c7:59:30 src=00:50:56:f3:9b:5b type=IPv4 |<IP  version=4 ihl=5 tos=0x0 len=84 id=2883 flags= frag=0 ttl=128 proto=icmp chksum=0xbb1a src=8.8.8.8 dst=192.168.163.147 |<ICMP  type=echo-reply code=0 chksum=0xa666 id=0x887 seq=0x1 |<Raw  load='\xed+9^\x00\x00\x00\x00a\xb4\n\x00\x00\x00\x00\x00\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f !"#$%&\'()*+,-./01234567' |>>>>
+>>> pkts[2]
+<Ether  dst=00:50:56:f3:9b:5b src=00:0c:29:c7:59:30 type=IPv4 |<IP  version=4 ihl=5 tos=0x0 len=84 id=20000 flags=DF frag=0 ttl=64 proto=icmp chksum=0x783d src=192.168.163.147 dst=8.8.8.8 |<ICMP  type=echo-request code=0 chksum=0xf75f id=0x887 seq=0x2 |<Raw  load='\xee+9^\x00\x00\x00\x00\x07\xba\n\x00\x00\x00\x00\x00\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f !"#$%&\'()*+,-./01234567' |>>>>
+>>>
+
+## print live packets
+
+pkts = sniff(iface="eth0", filter="icmp", count=20, prn=lambda x: x.summary())
+>>> pkts = sniff(iface="eth0", filter="icmp",  count=30, prn=lambda x: x.summary())
+
+Ether / IP / ICMP 192.168.163.147 > 8.8.8.8 echo-request 0 / Raw
+Ether / IP / ICMP 8.8.8.8 > 192.168.163.147 echo-reply 0 / Raw
+Ether / IP / ICMP 192.168.163.147 > 8.8.8.8 echo-request 0 / Raw
+Ether / IP / ICMP 8.8.8.8 > 192.168.163.147 echo-reply 0 / Raw
+Ether / IP / ICMP 192.168.163.147 > 8.8.8.8 echo-request 0 / Raw
+Ether / IP / ICMP 8.8.8.8 > 192.168.163.147 echo-reply 0 / Raw
+
+pkts = sniff(iface="eth0", filter="icmp",  count=30, prn=lambda x: x.show())
+
+## write packets to pcap file
+
+wrpcap("demo.pcap", pkts)
+>>> wrpcap("demo.pcap", pkts)
+
+## read from pcap
+
+rdpcap("demo.pcap")
+>>> read_pkts = rdpcap("demo.pcap")
+>>>
+>>> read_pkts
+<demo.pcap: TCP:3 UDP:0 ICMP:0 Other:0>
+>>>
+
+## export packet as Base64 encoded
+
+export_object(str(pkts[0]))
+
