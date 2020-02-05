@@ -1,0 +1,68 @@
+#
+## fetching web pages
+#
+
+* most basic funcationality to fetch data
+
+* urllib, urllib2
+
+* allows for argument encoding
+
+
+>>> import urllib
+>>>
+
+## open url
+>>> httpResponse = urllib.urlopen("http://localhost")
+>>>
+
+## response code
+>>> httpResponse.code
+200
+>>>
+
+## read page returned from server
+>>> print httpResponse.read()
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Apache2 Debian Default Page: It works</title>
+    <style type="text/css" media="screen">
+  * {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+  }
+
+  body, html {
+.....
+
+>>> dir(httpResponse)
+['__doc__', '__init__', '__iter__', '__module__', '__repr__', 'close', 'code', 'fileno', 'fp', 'getcode', 'geturl', 'headers', 'info', 'next', 'read', 'readline', 'readlines', 'url']
+>>>
+>>> httpResponse.url
+'http://localhost'
+>>>
+>>> dir(httpResponse.headers)
+['__contains__', '__delitem__', '__doc__', '__getitem__', '__init__', '__iter__', '__len__', '__module__', '__setitem__', '__str__', 'addcontinue', 'addheader', 'dict', 'encodingheader', 'fp', 'get', 'getaddr', 'getaddrlist', 'getallmatchingheaders', 'getdate', 'getdate_tz', 'getencoding', 'getfirstmatchingheader', 'getheader', 'getheaders', 'getmaintype', 'getparam', 'getparamnames', 'getplist', 'getrawheader', 'getsubtype', 'gettype', 'has_key', 'headers', 'iscomment', 'isheader', 'islast', 'items', 'keys', 'maintype', 'parseplist', 'parsetype', 'plist', 'plisttext', 'readheaders', 'rewindbody', 'seekable', 'setdefault', 'startofbody', 'startofheaders', 'status', 'subtype', 'type', 'typeheader', 'unixfrom', 'values']
+>>>
+
+## read http headers
+>>> httpResponse.headers.items()
+[('content-length', '10701'), ('accept-ranges', 'bytes'), ('vary', 'Accept-Encoding'), ('server', 'Apache/2.4.41 (Debian)'), ('last-modified', 'Tue, 16 Oct 2018 15:56:03 GMT'), ('connection', 'close'), ('etag', '"29cd-5785a97386ac0"'), ('date', 'Wed, 05 Feb 2020 08:04:54 GMT'), ('content-type', 'text/html')]
+>>>
+>>> for header, value in httpResponse.headers.items() :
+...     print header + ' : ' + value
+...
+content-length : 10701
+accept-ranges : bytes
+vary : Accept-Encoding
+server : Apache/2.4.41 (Debian)
+last-modified : Tue, 16 Oct 2018 15:56:03 GMT
+connection : close
+etag : "29cd-5785a97386ac0"
+date : Wed, 05 Feb 2020 08:04:54 GMT
+content-type : text/html
+>>>
+
