@@ -1,0 +1,149 @@
+#
+## understanding data on the web
+#
+
+* web data is primarily
+  - html
+  - xhtml
+  - xml
+  - json
+
+* need a mechanism to receive this data and parse
+
+* need a mechanism to generate this data and send
+
+
+#
+## parsing html
+#
+
+* hierarchical data
+
+* multiple parsers
+  - lxml
+  - beautifulsoup
+  - htmlparser
+  - ...
+
+* challenges in html parsin
+  - non adherence to standards
+  - most websites have broken html documents
+
+
+#
+## beautifulsoup
+#
+
+* easy to use
+
+* verion 4 onwards allows use of lxml and html5lib - handles bad html better
+
+* < version 3 was not great at handling bad html
+
+* handles encoding well
+
+
+#
+## parser comparison
+#
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Parser			| Typical usage				| Advantages					| Disadvantages
+Python’s html.parser	| BeautifulSoup(markup, "html.parser")	| Batteries included				| Not as fast as lxml, less lenient than html5lib.
+			|					| Decent speed					|
+			|					| Lenient (As of Python 2.7.3 and 3.2.)		|
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+lxml’s HTML parser	| BeautifulSoup(markup, "lxml")		| Very fast					| External C dependency
+			|					| Lenient					|
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+lxml’s XML parser	| BeautifulSoup(markup, "lxml-xml")	| Very fast 					| External C dependency
+			| BeautifulSoup(markup, "xml")		| The only currently supported XML parser	|
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+html5lib		| BeautifulSoup(markup, "html5lib")	| Extremely lenient				| Very slow
+			|					| Parses pages the same way a web browser does	| External Python dependency
+			|					| Creates valid HTML5				|
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+>>> from bs4 import BeautifulSoup
+>>>
+>>> import urllib
+>>>
+>>> html = urllib.urlopen('http://www.securitytube.net/video/3000')
+>>>
+>>> html
+<addinfourl at 139993348529520 whose fp = <socket._fileobject object at 0x7f52c0dc7c50>>
+>>>
+>>> html.code
+200
+>>>
+>>> bt = BeautifulSoup(html.read(), "lxml")
+>>>
+## by just running bt, it will output the whole source code of the page we opened. 
+>>> bt
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">\n<head>\n<meta content="6xTaa3p8o4OQd0L-
+....
+>>>
+>>> bt.title
+<title>Defcon 19  - The Art Of Trolling</title>
+>>>
+>>> bt.title.string ## returns in unicode
+u'Defcon 19  - The Art Of Trolling'
+>>>
+>>> bt.title.name
+'title'
+>>>
+>>> bt.meta
+<meta content="6xTaa3p8o4OQd0L-iD2eRvaDjJR8rxUdSyZ1Etm5LMI" name="google-site-verification"/>
+>>> bt.meta.next
+u'\n'
+>>>
+>>> bt.meta.next.next
+<meta content="text/html;charset=unicode-escape" http-equiv="Content-Type"/>
+>>>
+>>>
+>>> allMetaTags = bt.find_all('meta')
+>>>
+>>> allMetaTags
+[<meta content="6xTaa3p8o4OQd0L-iD2eRvaDjJR8rxUdSyZ1Etm5LMI" name="google-site-verification"/>, <meta content="text/html;charset=unicode-escape" http-equiv="Content-Type"/>, <meta content=" " name="keywords"/>, <meta content=" " name="description"/>, <meta content="no" name="apple-mobile-web-app-capable"/>, <meta content="black" name="apple-mobile-web-app-status-bar-style"/>, <meta content="width=device-width,initial-scale=0.69,user-scalable=yes,maximum-scale=1.00" name="viewport"/>]
+>>>
+>>> allMetaTags[0]
+<meta content="6xTaa3p8o4OQd0L-iD2eRvaDjJR8rxUdSyZ1Etm5LMI" name="google-site-verification"/>
+>>> allMetaTags[1]
+<meta content="text/html;charset=unicode-escape" http-equiv="Content-Type"/>
+>>>
+>>> allLinks = bt.find_all('a')
+>>>
+>>> len(allLinks)
+133
+>>>
+>>> allLinks[0]
+<a class="user" href="/Login?mode=login"><span class="bar">Login with Google</span></a>
+>>> allLinks[1]
+<a href="/">Home</a>
+>>> allLinks[0].string
+u'Login with Google'
+>>>
+>>> allLinks[0]['href']
+'/Login?mode=login'
+>>>
+>>> for link in allLinks:
+...     print link['href']
+...
+/Login?mode=login
+/
+#
+/groups?operation=viewall&groupId=0
+/listing?type=latest
+/listing?type=popular
+#
+/groups?operation=view&groupId=10
+/groups?operation=view&groupId=9
+/groups?operation=view&groupId=7
+/groups?operation=view&groupId=6
+
+## grab all text - data mining
+>>> bt.get_text()
+u'\n\n\n\nDefcon 19  - The Art Of Trolling\n\n\n\n\n\n\n\n\r\n\t\t@import url("/css/style.css");\r\n\t\t@import url("/css/forms.css");\r\n\t\t@import url("/css/forms-btn.css");\r\n\t\t@import url("/css/menu.css" ...
+
