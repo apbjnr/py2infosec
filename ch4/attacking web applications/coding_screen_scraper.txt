@@ -1,0 +1,44 @@
+#
+## screen scraper 
+#
+
+* dependent on the html structure
+
+* slight change might break scraper depending on how you've coded it
+
+>>> import urllib
+>>> from bs4 import BeautifulSoup
+>>>
+>>> httpResponse = urllib.urlopen('http://securitytube.net/video/3000')
+
+>>>
+>>> httpResponse.code
+200
+>>> html = httpResponse.read()
+>>>
+## have the whole html file
+>>> html
+'\r\n<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional ....
+
+
+## search for description (html tags)
+>>> bs = BeautifulSoup(html, "lxml")
+>>>
+>>> descr = bs.find('div', id='description')
+>>>
+>>> descr
+
+>>> videoLink = bs.find('iframe', { 'title' : 'YouTube video player' } )
+>>>
+>>> videoLink
+<iframe allowfullscreen="" frameborder="0" height="390" src="http://www.youtube.com/embed/3wAGdAOvu3I" title="YouTube video player" width="640"></iframe>
+>>>
+>>> videoLink['src']
+'http://www.youtube.com/embed/3wAGdAOvu3I'
+>>>
+
+>>> forms = bs.find_all('form')
+>>>
+>>> forms
+[<form action="">\n<input name="q" placeholder="Search" type="text" value=""/>\n<button type="submit"></button>\n</form>]
+>>>
