@@ -1,0 +1,51 @@
+#
+## mechanize 
+#
+
+* based on the perl module WWW:Mechanize
+
+* allows for stateful programming and browser emulation
+
+* powerful yet easy way to work through a website
+
+>>> import mechanize
+>>>
+>>> br = mechanize.Browser()
+>>>
+>>> br.open('http://www.securitytube.net/video/300')
+<response_seek_wrapper at 0x7f8df5cc0910 whose wrapped object = <closeable_response at 0x7f8df5cc0230 whose fp = <socket._fileobject object at 0x7f8df5ce0250>>>
+>>>
+
+## get forms
+>>> for form in br.forms() :
+...     print form
+...
+<GET http://www.securitytube.net/video/300 application/x-www-form-urlencoded
+  <TextControl(q=)>
+  <SubmitButtonControl(<None>=) (readonly)>>
+>>>
+>>> br.select_form(nr=0)
+>>>
+>>> br.form['q'] = 'sigh'
+>>>
+>>> br.submit()
+<response_seek_wrapper at 0x7f8df5ca5280 whose wrapped object = <closeable_response at 0x7f8df575e0f0 whose fp = <socket._fileobject object at 0x7f8df58003d0>>>
+>>>
+>>> for link in br.links() :
+...     print link
+...
+Link(base_url='http://www.securitytube.net/video/300?q=sigh', url=u'/Login?mode=login', text=u'Login with Google', tag=u'a', attrs=[(u'href', u'/Login?mode=login'), (u'class', u'user')])
+Link(base_url='http://www.securitytube.net/video/300?q=sigh', url=u'/', text=u'Home', tag=u'a', attrs=[(u'href', u'/')])...
+>>>
+>>> for link in br.links() :
+...     print link.url + ' : ' + link.text
+...
+/Login?mode=login : Login with Google
+/ : Home
+# : Videos
+/groups?operation=viewall&groupId=0 : Video Groups
+/listing?type=latest : Latest Videos
+/listing?type=popular : Popular Videos
+# : Megaprimers
+...
+>>>
