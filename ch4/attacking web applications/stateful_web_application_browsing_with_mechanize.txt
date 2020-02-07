@@ -1,0 +1,42 @@
+#
+## stateful web
+#
+
+* mechanize handles cookies by itself
+
+* we need to understand how to "browse" the application
+
+* "click links", "fill and submit forms", "maintain state"
+
+
+>>> import mechanize
+>>> 
+>>> br = mechanize.Browser()
+>>> 
+>>> br.open('http://target.com/login/index.php')
+>>> 
+>>> for form in br.forms() :
+>>>     print form
+>>> 
+>>> 
+>>> br.select_form(nr=0)
+>>> 
+>>> br.form['username'] = 'user'
+>>> br.form['password'] = 'password'
+>>> 
+>>> br.submit()
+>>> 
+>>> print br.response().read()
+>>> 
+>>> for link in br.links() :
+>>>     print link.url + ':' + link.text
+>>> 
+>>> new_link = br.click_link(text='xxxxx')
+>>> 
+>>> br.open(new_link)
+>>> 
+>>> print br.response().read()
+>>> 
+>>> for form in br.forms() :
+>>>     print form
+>>> 
